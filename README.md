@@ -1,4 +1,4 @@
-# Smart-Expense-Tracker
+# Savings Planner
 Course Name  : Software Engineering Laboratory    
 Course Code: CSE-3206   
 Group no : 06   
