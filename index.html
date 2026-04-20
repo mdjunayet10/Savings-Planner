@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Expense Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="bg-orb orb-1" aria-hidden="true"></div>
+  <div class="bg-orb orb-2" aria-hidden="true"></div>
+
+  <main class="app-shell">
+    <section id="auth-section" class="panel auth-panel">
+      <p class="label">Web Based Expense Manager</p>
+      <h1>Smart Expense Tracker</h1>
+      <p class="subtitle">Record, categorize, and understand your spending with a fast browser-only app.</p>
+
+      <div class="auth-tabs" role="tablist" aria-label="Authentication forms">
+        <button type="button" class="tab-btn is-active" data-auth-tab="login" role="tab" aria-selected="true">Login</button>
+        <button type="button" class="tab-btn" data-auth-tab="register" role="tab" aria-selected="false">Register</button>
+      </div>
+
+      <form id="login-form" class="auth-form is-active" autocomplete="on">
+        <label for="login-email">Email</label>
+        <input id="login-email" name="email" type="email" placeholder="you@example.com" required>
+
+        <label for="login-password">Password</label>
+        <input id="login-password" name="password" type="password" placeholder="Enter password" required>
+
+        <button type="submit" class="btn primary">Log In</button>
+      </form>
+
+      <form id="register-form" class="auth-form" autocomplete="on">
+        <label for="register-name">Full Name</label>
+        <input id="register-name" name="name" type="text" placeholder="Your full name" required>
+
+        <label for="register-email">Email</label>
+        <input id="register-email" name="email" type="email" placeholder="you@example.com" required>
+
+        <label for="register-password">Password</label>
+        <input id="register-password" name="password" type="password" placeholder="Minimum 8 chars, letters and numbers" required>
+
+        <label for="register-confirm-password">Confirm Password</label>
+        <input id="register-confirm-password" name="confirmPassword" type="password" placeholder="Confirm password" required>
+
+        <button type="submit" class="btn primary">Create Account</button>
+      </form>
+
+      <p id="auth-feedback" class="feedback" aria-live="polite"></p>
+      <p class="hint">Demo admin: admin@expense.local / Admin1234</p>
+    </section>
+
+    <section id="app-section" class="dashboard hidden">
+      <aside class="sidebar panel">
+        <div>
+          <p class="label">Personal Finance</p>
+          <h2 class="brand-title">Smart Expense Tracker</h2>
+        </div>
+
+        <p id="welcome-text" class="welcome"></p>
+
+        <nav class="nav" aria-label="Primary">
+          <button type="button" class="nav-btn is-active" data-view="overview">Overview</button>
+          <button type="button" class="nav-btn" data-view="expenses">Expenses</button>
+          <button type="button" class="nav-btn" data-view="reports">Reports</button>
+          <button type="button" class="nav-btn hidden" id="admin-tab" data-view="admin">Admin</button>
+        </nav>
+
+        <button type="button" id="logout-btn" class="btn ghost full">Log Out</button>
+      </aside>
+
+      <section class="content-area">
+        <header class="content-header panel">
+          <div>
+            <p class="label">Dashboard</p>
+            <h2 id="view-title">Overview</h2>
+          </div>
+
+          <div class="toolbar">
+            <label for="date-range">Filter period</label>
+            <select id="date-range" aria-label="Date filter">
+              <option value="all">All time</option>
+              <option value="month">This month</option>
+              <option value="last30">Last 30 days</option>
+            </select>
+          </div>
+        </header>
+
+        <p id="app-feedback" class="feedback" aria-live="polite"></p>
+
+        <section id="overview-view" class="view">
+          <div class="card-grid">
+            <article class="card stat-card">
+              <p class="card-label">Total Expenses</p>
+              <h3 id="card-total">BDT 0.00</h3>
+            </article>
+
+            <article class="card stat-card">
+              <p class="card-label">This Month</p>
+              <h3 id="card-month">BDT 0.00</h3>
+            </article>
+
+            <article class="card stat-card">
+              <p class="card-label">Transactions</p>
+              <h3 id="card-count">0</h3>
+            </article>
+
+            <article class="card stat-card">
+              <p class="card-label">Top Category</p>
+              <h3 id="card-category">-</h3>
+            </article>
+          </div>
+
+          <div class="two-col">
+            <article class="panel inner-panel">
+              <h3>Recent Expenses</h3>
+              <ul id="recent-expenses" class="recent-list"></ul>
+            </article>
+
+            <article class="panel inner-panel">
+              <h3>Spending by Category</h3>
+              <div id="overview-category-bars" class="bar-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section id="expenses-view" class="view hidden">
+          <div class="split-layout">
+            <article class="panel inner-panel">
+              <h3 id="expense-form-title">Add Expense</h3>
+
+              <form id="expense-form" class="expense-form">
+                <input id="expense-id" type="hidden">
+
+                <label for="expense-amount">Amount</label>
+                <input id="expense-amount" type="number" min="0.01" step="0.01" placeholder="0.00" required>
+
+                <label for="expense-date">Date</label>
+                <input id="expense-date" type="date" required>
+
+                <label for="expense-category">Category</label>
+                <select id="expense-category" required>
+                  <option value="Food">Food</option>
+                  <option value="Transport">Transport</option>
+                  <option value="Bills">Bills</option>
+                  <option value="Shopping">Shopping</option>
+                  <option value="Health">Health</option>
+                  <option value="Education">Education</option>
+                  <option value="Entertainment">Entertainment</option>
+                  <option value="Utilities">Utilities</option>
+                  <option value="Other">Other</option>
+                </select>
+
+                <label for="expense-description">Description</label>
+                <textarea id="expense-description" rows="4" maxlength="180" placeholder="Short note about this expense"></textarea>
+
+                <div class="form-actions">
+                  <button type="submit" id="expense-submit-btn" class="btn primary">Save Expense</button>
+                  <button type="button" id="expense-cancel-btn" class="btn ghost hidden">Cancel Edit</button>
+                </div>
+              </form>
+
+              <p id="expense-feedback" class="feedback" aria-live="polite"></p>
+            </article>
+
+            <article class="panel inner-panel">
+              <div class="table-head">
+                <h3>Expense History</h3>
+
+                <div class="search-wrap">
+                  <input id="search-expense" type="search" placeholder="Search by category, date, amount, or note">
+                  <button type="button" id="clear-search-btn" class="btn small ghost">Clear</button>
+                </div>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Category</th>
+                      <th>Amount</th>
+                      <th>Description</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="expense-table-body"></tbody>
+                </table>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section id="reports-view" class="view hidden">
+          <div class="two-col">
+            <article class="panel inner-panel">
+              <h3>Category Summary</h3>
+              <div id="report-category-bars" class="bar-list"></div>
+            </article>
+
+            <article class="panel inner-panel">
+              <h3>Monthly Summary</h3>
+              <div class="table-wrap compact">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Month</th>
+                      <th>Transactions</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody id="monthly-table-body"></tbody>
+                </table>
+              </div>
+              <button type="button" id="download-report-btn" class="btn secondary">Download JSON Report</button>
+              <p id="report-feedback" class="feedback" aria-live="polite"></p>
+            </article>
+          </div>
+        </section>
+
+        <section id="admin-view" class="view hidden">
+          <div class="card-grid admin-grid">
+            <article class="card stat-card">
+              <p class="card-label">Total Users</p>
+              <h3 id="admin-total-users">0</h3>
+            </article>
+
+            <article class="card stat-card">
+              <p class="card-label">Active Users</p>
+              <h3 id="admin-active-users">0</h3>
+            </article>
+
+            <article class="card stat-card">
+              <p class="card-label">All Expenses</p>
+              <h3 id="admin-total-expenses">0</h3>
+            </article>
+
+            <article class="card stat-card">
+              <p class="card-label">System Spend</p>
+              <h3 id="admin-system-total">BDT 0.00</h3>
+            </article>
+          </div>
+
+          <article class="panel inner-panel">
+            <h3>User Accounts</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Expenses</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-user-body"></tbody>
+              </table>
+            </div>
+            <p id="admin-feedback" class="feedback" aria-live="polite"></p>
+          </article>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <script src="assets/js/app.js" defer></script>
+</body>
+</html>
