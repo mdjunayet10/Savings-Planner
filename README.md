@@ -1,4 +1,4 @@
-# Smart Expense Tracker
+# Savings Planner
 
 ## Project Overview
 
